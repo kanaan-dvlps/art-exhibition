@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111317" media="(prefers-color-scheme: dark)">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Vårutställning 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<style>
+/* Layout: one narrow reading column like a printed wall label, sticky bar with the EN/SV switch, one view per artwork routed on #art-NN */
+:root {
+  --bg: #f4f5f2;
+  --surface: #ffffff;
+  --fg: #16181d;
+  --muted: #5d626b;
+  --rule: #d9dbd6;
+  --accent: #1f3fb8;
+  --accent-ink: #ffffff;
+  --sold: #a3261d;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Newsreader", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317; --surface: #1a1d23; --fg: #eceef1; --muted: #9aa0aa;
+    --rule: #2c3038; --accent: #8ea4ff; --accent-ink: #0d1020; --sold: #ff8a7d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317; --surface: #1a1d23; --fg: #eceef1; --muted: #9aa0aa;
+  --rule: #2c3038; --accent: #8ea4ff; --accent-ink: #0d1020; --sold: #ff8a7d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-display); font-size: 16px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap {
+  max-width: 640px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+header.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+}
+header.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; }
+.brand { font-weight: 700; font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); text-decoration: none; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lang { display: inline-flex; border: 1px solid var(--fg); border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.lang button {
+  font: inherit; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em;
+  border: 0; background: transparent; color: var(--fg);
+  min-width: 56px; min-height: 40px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.lang button:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+main .wrap { padding-block: 20px 48px; }
+
+/* Artwork view */
+.plate { width: 100%; max-width: 100%; aspect-ratio: 4 / 5; border-radius: 4px; overflow: hidden; background: var(--surface); position: relative; }
+.plate img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.plate .ph { position: absolute; inset: 0; }
+.no { font-variant-numeric: tabular-nums; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 20px; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.75rem, 7vw, 2.4rem); line-height: 1.08; letter-spacing: -0.02em; margin: 6px 0 4px; text-wrap: balance; }
+.artist { font-size: 1.1rem; font-weight: 500; margin: 0; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; margin: 20px 0 0; padding: 16px 0; border-top: 1px solid var(--fg); border-bottom: 1px solid var(--rule); font-size: 0.95rem; }
+.facts dt { color: var(--muted); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding-top: 2px; }
+.facts dd { margin: 0; min-width: 0; font-variant-numeric: tabular-nums; }
+.price { font-weight: 700; }
+.price.sold { color: var(--sold); }
+.story { font-family: var(--font-body); font-size: 1.2rem; line-height: 1.6; margin-top: 24px; max-width: 65ch; }
+.story h2 { font-family: var(--font-display); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+.story p { margin: 0 0 1em; }
+.story p:first-of-type::first-letter { font-weight: 500; }
+
+nav.steps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px; }
+nav.steps a, .all {
+  display: flex; flex-direction: column; justify-content: center; gap: 2px;
+  min-height: 64px; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 4px;
+  color: var(--fg); text-decoration: none; background: var(--surface); min-width: 0;
+}
+nav.steps a small { color: var(--muted); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+nav.steps a span { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+nav.steps a.next { text-align: right; }
+.all { margin-top: 12px; text-align: center; font-weight: 600; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* Index view */
+.intro h1 { margin-top: 8px; }
+.intro p { font-family: var(--font-body); font-size: 1.15rem; color: var(--muted); margin: 8px 0 24px; max-width: 60ch; }
+ol.works { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--fg); }
+ol.works a { display: grid; grid-template-columns: 2.5rem 56px 1fr; align-items: center; gap: 14px; padding-block: 12px; border-bottom: 1px solid var(--rule); color: var(--fg); text-decoration: none; }
+ol.works .n { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--muted); }
+ol.works .thumb { width: 56px; height: 70px; border-radius: 3px; overflow: hidden; position: relative; background: var(--surface); }
+ol.works .t { min-width: 0; }
+ol.works .t b { display: block; font-weight: 600; }
+ol.works .t span { color: var(--muted); font-size: 0.9rem; }
+.note { margin-top: 28px; font-size: 0.8rem; color: var(--muted); }
+.qrgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 16px; }
+.qrcard { background: #ffffff; color: #16181d; border: 1px solid var(--rule); border-radius: 4px; padding: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.qrcard img { width: 100%; height: auto; image-rendering: pixelated; display: block; }
+.qrcard b { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.qrcard span { font-size: 0.85rem; line-height: 1.3; }
+.qrcard a { color: #1f3fb8; font-size: 0.8rem; font-weight: 600; }
+.qrlink { display: inline-block; margin-top: 8px; color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .view { animation: in .25s ease-out; }
+  @keyframes in { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#" id="brand"></a>
+    <div class="lang" role="group" aria-label="Language / Språk">
+      <button type="button" id="btn-sv" data-lang="sv" lang="sv">SV</button>
+      <button type="button" id="btn-en" data-lang="en" lang="en">EN</button>
+    </div>
+  </div>
+</header>
+<main><div class="wrap" id="app"></div></main>
+
+<script>
+// ===== EDIT HERE: exhibition + artworks (example content) =====
+const EXHIBITION = {
+  en: { name: "Spring Exhibition 2026", intro: "Ten works. Scan the code next to each piece to read its story here.", note: "" },
+  sv: { name: "Vårutställning 2026", intro: "Tio verk. Skanna koden bredvid varje verk för att läsa dess berättelse här.", note: "" }
+};
+// price: number in SEK, or null when sold. colors: placeholder image until a photo is added.
+const WORKS = [
+  { artist: "Elin Norberg", year: 2024, price: 18500, size: "80 × 100 cm", img: "", colors: ["#2d4a7a", "#e3c86a"],
+    en: { title: "Low Tide at Fårö", medium: "Oil on linen", story: ["Painted over three mornings on the north shore of Fårö, when the water pulled back and left the limestone bare.", "Norberg worked fast, before the light turned flat. The yellow band is the first sun on wet stone."] },
+    sv: { title: "Lågvatten vid Fårö", medium: "Olja på linne", story: ["Målad under tre morgnar på Fårös norra strand, när vattnet drog sig tillbaka och lämnade kalkstenen bar.", "Norberg arbetade snabbt, innan ljuset blev platt. Det gula bandet är den första solen på våt sten."] } },
+  { artist: "Jonas Lind", year: 2023, price: null, size: "60 × 75 cm", img: "", colors: ["#7a2d2d", "#f0e4d4"],
+    en: { title: "Kitchen, 6 a.m.", medium: "Acrylic on canvas", story: ["The artist's grandmother's kitchen in Umeå, painted from memory after the house was sold.", "Every object is placed where it stood. Only the clock is wrong: it shows the hour he was born."] },
+    sv: { title: "Kök, kl. 6", medium: "Akryl på duk", story: ["Konstnärens mormors kök i Umeå, målat ur minnet efter att huset såldes.", "Varje föremål står där det stod. Bara klockan är fel: den visar timmen då han föddes."] } },
+  { artist: "Sara Okafor", year: 2025, price: 9200, size: "50 × 70 cm", img: "", colors: ["#1d5c4a", "#d7a1c4"],
+    en: { title: "Greenhouse I", medium: "Gouache on paper", story: ["First of a series made in the Botanical Garden in Gothenburg during one wet October.", "Okafor painted the glass, not the plants. The pink is condensation catching the lamps."] },
+    sv: { title: "Växthus I", medium: "Gouache på papper", story: ["Den första i en serie gjord i Botaniska trädgården i Göteborg under en regnig oktober.", "Okafor målade glaset, inte växterna. Det rosa är imma som fångar lamporna."] } },
+  { artist: "Elin Norberg", year: 2025, price: 24000, size: "120 × 90 cm", img: "", colors: ["#3c3f46", "#c9d4e0"],
+    en: { title: "Ferry Lane", medium: "Oil on linen", story: ["The route between Slussen and Djurgården in February fog, seen from the back deck.", "The painting was scraped down and repainted four times. Traces of the earlier versions show at the edges."] },
+    sv: { title: "Färjeleden", medium: "Olja på linne", story: ["Leden mellan Slussen och Djurgården i februaridimma, sedd från akterdäck.", "Målningen skrapades ner och målades om fyra gånger. Spår av de tidigare versionerna syns i kanterna."] } },
+  { artist: "Mikael Haddad", year: 2022, price: 6500, size: "40 × 40 cm", img: "", colors: ["#c2552b", "#262a33"],
+    en: { title: "Signal", medium: "Screen print, edition 4/20", story: ["Made from a photo of a railway signal outside Kiruna, cut down to two colours.", "Haddad prints each sheet by hand. No two in the edition line up exactly."] },
+    sv: { title: "Signal", medium: "Screentryck, upplaga 4/20", story: ["Gjord från ett foto av en järnvägssignal utanför Kiruna, nedskalad till två färger.", "Haddad trycker varje ark för hand. Inga två i upplagan ligger exakt rätt mot varandra."] } },
+  { artist: "Sara Okafor", year: 2025, price: 9200, size: "50 × 70 cm", img: "", colors: ["#2a6b52", "#f2d27a"],
+    en: { title: "Greenhouse II", medium: "Gouache on paper", story: ["Same room as Greenhouse I, two weeks later, after the heating failed for a night.", "The yellow is frost on the inside of the glass, lit from behind."] },
+    sv: { title: "Växthus II", medium: "Gouache på papper", story: ["Samma rum som Växthus I, två veckor senare, efter att värmen hade slutat fungera en natt.", "Det gula är frost på insidan av glaset, belyst bakifrån."] } },
+  { artist: "Jonas Lind", year: 2024, price: 14000, size: "70 × 90 cm", img: "", colors: ["#4b3a6b", "#e8b48f"],
+    en: { title: "Neighbours", medium: "Acrylic on canvas", story: ["Twelve windows of the building across the street from Lind's studio in Malmö.", "He asked each household for permission and painted only the windows they said yes to. Two stayed dark."] },
+    sv: { title: "Grannar", medium: "Akryl på duk", story: ["Tolv fönster i huset mittemot Linds ateljé i Malmö.", "Han bad varje hushåll om lov och målade bara de fönster där svaret var ja. Två förblev mörka."] } },
+  { artist: "Mikael Haddad", year: 2023, price: 6500, size: "40 × 40 cm", img: "", colors: ["#1f6fa8", "#f3efe6"],
+    en: { title: "Crossing", medium: "Screen print, edition 9/20", story: ["A pedestrian crossing in Sundsvall after snow, when only the stripes showed through.", "The companion piece to Signal, hung on the same wall on purpose."] },
+    sv: { title: "Övergång", medium: "Screentryck, upplaga 9/20", story: ["Ett övergångsställe i Sundsvall efter snöfall, när bara ränderna syntes igenom.", "Ett parverk till Signal, avsiktligt upphängt på samma vägg."] } },
+  { artist: "Ingrid Wallin", year: 2021, price: 32000, size: "100 × 140 cm", img: "", colors: ["#5a4a2e", "#a9c27a"],
+    en: { title: "Field after Harvest", medium: "Oil and wax on panel", story: ["The field behind Wallin's farm in Skåne, the week the barley came in.", "She mixed beeswax from her own hives into the paint, which is why the surface still smells faintly sweet."] },
+    sv: { title: "Åker efter skörd", medium: "Olja och vax på pannå", story: ["Åkern bakom Wallins gård i Skåne, veckan då kornet bärgades.", "Hon blandade bivax från sina egna kupor i färgen, därför doftar ytan fortfarande svagt sött."] } },
+  { artist: "Ingrid Wallin", year: 2026, price: 12500, size: "30 × 40 cm", img: "", colors: ["#202a3a", "#e7e2d2"],
+    en: { title: "Study for Winter", medium: "Oil on panel", story: ["The newest work in the show, finished two weeks before the opening.", "A small study for a large painting Wallin has not started yet. She calls it a promise to herself."] },
+    sv: { title: "Studie för vinter", medium: "Olja på pannå", story: ["Det nyaste verket i utställningen, färdigt två veckor före vernissagen.", "En liten studie för en stor målning som Wallin ännu inte har påbörjat. Hon kallar den ett löfte till sig själv."] } }
+];
+// ===== END EDIT =====
+
+const QR = ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADHElEQVR42u2dS64jIQxF7VbPqR1k/8vKDmAF9w0AY6rSeoPXLbXEQVGpRMgZWLryB0Nc9uPRftlfGECAAAECBAgQIECAAAHyTyAe4zK/zN3N5kvzvOa2GMMCOR1S1IeZqfYKgOvtkvwya+7uVjS+SosxLBAg4Uf8Mivyl6xoOJ1QzWMxhgVyKuT3h7nm1lxmI1Yr1Uvt745hgQD5M0SaHqeszR9V09sxLBAgT78TOvGe7Jipe5/mMrOi4XpKzYsxLJBTIbZn/WZF33/SYkmqGBbIuX5Hz3ynudosUM8MqK8UhgUCZPodVeuf8CYjx4n5ol5t62vWDH4HyOHakW6iGEqJTR9pbetMcaEdIGhnCSTmu8eZGgnhrP1T/A4QtNOdTplxmpLHKZus4tuQD9oBcrh2wtc85ZMd0BLOtgDDAjm7VpCDMVvFgUh2stCigIB2gOB3hlJKckOp/paUsu0BoR0gaCc3Ua/grW7FhFVGyAPtADlZO2UXTvQP5F6C5HdW1oN2gBwKmf1ss2nNzHy2rsW8Ulv17GrrKyuGBXI4pJ9x66dyVMfBt9W6VhQnSWP0GQwL5PCY7VamHhWDopz1RMy2bYwSswE5vlYQelnyyXUD6flD6mxAgHRp+DUOuGU1+evWvTbnidmA4HdSPJa9z33DtKyW0S4l/A4QtLMOF2jfIc3nEZ6t1GgHCNp5NHzmxMeerTv0swFBO9p2PLdG0PQMBY1fRT0B7QA5FDL2Rr1o3CvVNz3N3ExF41lq3A6qdo2XdeUUhgVytt9ZfsQ+3v/5IYQjZgNyvHZuZYGllCmWsSBPsjcKBO3sI6c2IZasGupsQIB8/B+EfiOou6uOBrbYIe0KWtdWY1ggx9cKbHREj/Rfza1UnwUBn63U/XbQEcM1+gqAELPpfs463f95vxvnGewRswEB0l3PS/nSD2vz70Jyo05RCtswLBAgZmZ6+zi/YyP3iWf+2x3yHSDkO0My4XfmMw6Hrv3QdkVmlC6mxrBADs53YpTHjQTzZXumS3XId4AcCXH9nNEwLBAgQIAAAQIECBAgQP5DyBf4I+9HVHNQnAAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADVUlEQVR42u2dQY4dIQxEy1H2cIO+/7HmBnACZ2HjpvtH2UwiReKhv+ihmbewVDIUhjbXt9v8ob/QgAABAgQIECBAgAABAuSfQKxal6bFL/60LjPTzOf3YAIL5HBI82j1wrrcPXXUXM0l+ZD1z8EEFsjRkC2PyC73ITPzITW/M1GXj/dgAgvkSMjPzy5rbtNcUhvW3KqTwAIB8keIf1kkF831EP0j53IEFgiQPe/4nnckNbc29re2jXECCwSIMsVEK+sgLbW+/bk634MJLJCD886rMscln+bPRBOdn4MJLJAjIUq7eaTzrOY+FP5z9EdneNQ5Ror+9b8EFsjB2vGHNMociF8IqnrSN2ieGz1oBwjaWYudO+PsOnIv221PVWgHCJAQRe6EapUQrGmbddn1ITQCC+TsvFMTsD3pvB52HbHeAYJ2bo0MvUyDmL+9lzmVnljvADkakh61NZdkbeSezeypkdgVbTlJM8nj1RpAYIEcrp1UyrSoH1DzqiKw1a82rI3SUXYSWCDHQ+xyuzyrBcorWNO2nLx93R6CGmcQgLDeWcdzNg/t4VG3t7d2mwasd4Ac7xXcKWYXy/ZQr+4HtAME7VQScd99tnfVwXjWGOBRA2HO1p6lay+DeteU9FIZ2gFytHZ+N4Xbt3X2XCPq2YAA2SAhh7wnJ671uPzTastzPZeH50ZggZwKWed3Zs9rCqapeWzixJ7OvU+6TvT47D7N7xsMCCyQc7WTm6Gzp2pif6eN2Cq9D1831+xltbE3CoT1zqPac2zHELbfY72DVwAE7bws6GrbfYb77s/uEqAdIMzZXLKwCGavMrZqVnfmrGJRn1YjCSyQk7VTBdIlGZ+mKA1ddaGx/JHSiCOwQIBI2usK8vL2OkMa87R5Xz9VczzucgdC3rkTyUou60SPm/K0Th06iPmbEVggQPT8tEF8+CC2Qaf5l9m1CnUqDUl8BwEIeedOPWkI+H7eLdVUJ91i8taG2N8BAuTV1udCFIfdqiBn5iIolz+Tb1cBIe88mq0ag1r1qI3y3CoxEVggaCfafi40i3Nm92WvWfOQjLWh2X2rzCGwQI7WzrZl45vJpvp6yDS1cUspBTUILJBTIebfZ0wCCwQIECBAgAABAgQIkP8Q8gu3pAxpjWqKlAAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADQElEQVR42u2dSYokMQxFpab3jhvk/Y+VN7BP8HshD3JEdkHRtWjwM0UR6TRvIfhosELpsn9e7Zf9wAICBAgQIECAAAECBAiQn4WYJCklPaU/q/aP8aBqVmTlfliSKoYFciDk91BBSMU8hDP+e3PFx6K+U+rtMIYFcjjE3f0aLqa5v2TNrchfiq/i29thDAvkdL+TV4RtzTV8jdolMzUXhgUC5AtIc39JkjWPFZs9bKsYFgiQze8o+R1vbqX6qBt4OKN29XwnH8awQA6HJBfj16q29TSnyC/zl3qOk/0RhgVytt/JfqQX1kaFTflA84fTwbBATvc73dH47oBCRHWoRponrc1SG4YFciBk3I2Oe09JqhZ/szIQ96GzSjA3x3kMC+Rc7XS9aHUOTEH11oLZYJD26SsAgnY2yaSGnF6XHqsfK0Nu+B0gQIaO/LIpIr1db+8NbM39Mr1XsjNrcRgWyNF+x3rMlnOZcD0z/clJ0PI++B0gx2unr5HdrJpAXTnO7Ka20VmNdoCcCln3Oz761tZOkZfq0VcQzWwrTptN1BgWyPExm5bH6aGaPvR+rjKCUSsAgnaSfEa92mxpZ+5P+awiG9oBcrh2pjcpSy+5VrCitfxAvgOEmK3stzbV8g3ph6COWgEQtHOrs+23pTe9rHkFMy1CO0CoFaS2HHt0r9lz+gf5DhC0k+Sz/EvdwrlnqEa+AwTtLI2kWVJZMqvfoNrWhIDfAYJ2dGsV2FOhshqtZ0812gGCdrYG6fphjOHW0qZdOGgHyKGQNGOqXWbmY66UNZ8tOjHrI5pwoktnbFYMCwTteExgi3mGpSoJqj+XakXR2OYYFggxm1K0Jt3ed5tn+unyGEZNzAbk+FpBLhqsr2pqcnu8YYp2gKCd7E1yz8B6bWd/kWdzPWgHyOEx22MiQdbRNvQDvwMEyF4rmD8OYmNsu2Iz5hy2MZjazEr1NeQQwwIBMoRTrY83XINzx6jDqCS8HcMCAXJfZRs2pbfHPOoe1MWYUOtDqjEsECCzFWf+KNV0LrGT57rb9mMiGBbIwflOWzHYvPr0USjwkeyM/xd3o0COh/ztp9y+sxqGBQIECBAgQIAAAQIEyH8I+QOgErYwbHMBOAAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADMUlEQVR42u2dQY4cIQxFv6PsqRvM/Y81N4ATOAuDcdHZJZEi8VCruoqi38LSl7ExtLn+uI0f+gsNCBAgQIAAAQIECBAgQP4JxLI90ljX9Rgfe2TPx2AMC+RSyM/53foUkSTJJYvrMElqruazp/VjMIYFcjmk+BGZmfd5jcd0PdmTgzEsECBTOF+u5uFu8t6+HMMCAfKbOVtpPsyHuaS47v5HMWfDsECAFO2kTKy5hdMpMvHsfw/GsEBuh4yZOVupA58ptef1+PvBGBbIxX7nCGa8fF49wz4HY1ggV0Lk0brU3N3V3LvcZ64gBkSOOnriVYxZv8WwQC7Wji/h+PYq3ucnBJU9cROCQjtAyBVoPJoroX0+RupAM+Hm+RguaRDvAMHvLL8j7SnZmsXl9Gw7mvc0D78D5GbtpC4OvdSbHQo1J94Bgna2Rmpc4zs5cIY5Uk0goB0gl8c7FhpZ8c5eAx2m1uNtBDtRXZDREIYFQq4gvYyFXiI50NyyRKd1KzryXbGDYYHcHu/sBR3pWOvJxzNjwJwNCNqJ+xXX1BXSzMLtX2XSAO0AuT5XUDMDr0KC8uq8QTtA0M5ndtqLJ6o6qjUGzNmAMGcrazeHi6lro+csDr8DBL/TPx6b12Wd6mtEPRsQIAUScpgH40j+bfbluX8nr3Nfz5f7N/VsQPA7JdXWX1noXX7Td/JtZ+HwO0Duhay6AknDfDxHgUG82puvm2s8GRCxNgoEv1Pr2XaBdHU3R7xDrgAI2nF/7TvI1vwoBP2c1KEdIMzZ4iDQKPWse9zWuVLrzJxVJurDciSGBXJ7vPO+WSGPWzlNd4pl7xjFsEBuh9TSTnsU50d5X/nqXvRSVkg5yx0Ifmc7kuVcIuE2+8ejsunAVv4NwwIBchZLl2XQWCSdqYN0Q2urAoYFcivktQdhJtDee3ZeI7sOrZFnAwLk1FSfTmefcxhOJxS0/lIEwwK5PN6pzcop7nOHdetxRJvlf4tgWCBoJx1NdTrDovzGV3rN1l+/Wesaj5fKHAwL5GrtlCWb9C+ztm2umZpa31KaguoYFsitEPM/ZwwMCwQIECBAgAABAgQIkP8Q8gsEBFMzgzp8JQAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADHUlEQVR42u2dS27kMAxEi4Ps5Rvk/sfKDaQTcBaUKcrxrJLFAHpG0FDU6rcgUCiR+thcP37GH/3CAwQIECBAgAABAgQIECC/C5G7u5ekp/nq7/K+9bt7DohOd/dOYIEcDAkVuKdqNEySXVM+3uXu0VkHE1ggQMzMLknSMDW3Tw+ZRKddsmu50hpMYIEcCvl47bXWp8VILlnrJvmw+JfAAgHyqh27JaNxhYJ8mA/z5gQWCJDv2tmEMUzhNdOGZonAJLX+zX0ILJCDIcPiiRxn5jXNZ5rzyHfqYAIL5GzfqT7iw7w0XNLd8+JQBBYIvmPLTcxsVtsuaVhWp+dyz7A0IwIL5FTIvTba5l+ufs4FnRzWZ082cpWHtVEgJ2tnLoDeipjt7Oman7m1oGgN7QDBdzax3N+mBz3UlJ1oB8jR2tHaMzANpc92mI7eFnfQDhC083CcakbPNOfOfch3gKCdrAms+ditkW379O5BSz5oB8iJkG19x1p3ye6GylJOrPXkaij7CoDgO8+jB9V3Sllgjb/zIPIdIGgns5uZ1+QU7iGTnML19Su0AwTtVH+pNYE8+7Y8qDbQDpDD52xlDraqBG07jl1HrgVTtAPk7FrBPGH9qA/MKsEV5xHiAEJ+awQWCL5Tcxl/7Bl4bmNbORHrO0DQTtn/OZ9cEq2711QSH2c/GxC0s/aCaq+tZWNVDGpBmzobELTj2+mDbZt0cZm6ZXTXHYEFcrB2ahW6zMfWmNckCO0AQTu717wfPXjscBM1aiBopxx5K55SD/Js5YJSmkM7QNCO6pnQ3IRzj6mlg2wzZwMCZDt3ICmu+yjXUE8z+rJVOugEFgi+s78HoXlNZ97TonK5Ab4D5GjI/moDu6bd5IXtcbdh3RdaTIrAAjk933mcCS0ZzZb+ZOJDvgMEyPaEar7Mvyysxz7n5brbAW3yHSBHQz7++U1zC3PJK3Zj8ib5uDxuDW2dwAJBO6teMMzH5aUnjhvEW3g0P53AAkE7oZdNRM01Lo+3h8Trq+4x04bGRWCBnA0x/zljEFggQIAAAQIECBAgQID8h5C/nCLbUdDdToIAAAAASUVORK5CYII=", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADJUlEQVR42u2dTY4cIQxG7Sh76gZ9/2PNDeAEXxbmx9A9q0mkSLxSqaeKZt7C0idjY9wu+/HVftlfuIAAAQIECBAgQIAAAQLkn0B8Xo+5+whkfN5zPB7mZAwL5FbI7/631C4iM6WHoSJTjLfnmIxhgQBZfqS5mUkyMyvyx+ZtRedkDAvkcr+zX56e1R4r1c0UmsKwQIB8ox2fq7L2dB/UXM1VhGGBAHnXziaM5t3XhJqKrCgHO8KwQIAMscQVMU6Pa0awY5Fee43xPBnDArnb72gLcFzpQWY2R949FIYFgt/x5U3650v+mDWXFIHPmjycEYYFcrnf8ZFPi+jGR34gJBOBT3dDwxl5qcKwQO6FmOKqZkWS+ufY3+kj8W21OTJvSaoYFsi92tkkM2SyBuuYlibMQbQD5Grt2KoZ6A6lng/f+ywMC+RqyLYwq5bFomr68nA0/XWbgGGB3O13LK3TStfInPPug2aIhN8BciVk399pz6ydXls57bGRXstl1RgWCH5nJgHmSmxLtdV9/kgjEO8AQTs51ZaXZyspfSirrv9CO0DQzhLLnhNYX5VPD2gHyOVrtpKcy7HpM/JpeebaMEU7QO7OFczam3UydJTcyCzOI8S5npklcAwLBL+T9kbnCi0v5D4MpvgIvwPkdu3klFrZKtxyXcExjnaAkCvY5JPrc2YhwZHQJs8GBO2kIs+ul7KqQ7f66r2wDe0AAWJFcd5tuphIIKiOllNfHq/rFvVsQPA7+5GcasfCzHKNQSo8IN4BcjEk9clpbtFLKl73Lm1eamSqV++CaJuDYYFcr52ul6J+5jrJR2Ye56/nRo9xBgEIa7bzWl+9b+7ULXVArgAI2lnv7xm2j2GRpe1RtAPk7lzBWa6mVLeWNYXfAQJkj3dWG+rZ3rBUizbU7dHo5T4btfk6AYdhgQDpLsZfsub6Gj9W9erNdT8X8GBYIHf7nW0h11xFHnHN3lA3uiCquRV591MYFsjV2ln5gl0sNpLSHvs7/VMYFgjayVGMHX0/wvWEfOZv8dj48UQMC+ReiOvnjIZhgQABAgQIECBAgAAB8h9C/gDRHVnnRInJVAAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADKklEQVR42u2dS27kMAxEyUH28g36/sfKDaQT1CyoD2V7lwwwgJ4RdNxu4S0IFEoUKdllP77aH/uFCwgQIECAAAECBAgQIED+CcTndVl8mpk1t+Z+WXy6u5n1AWMwgQVyKuSr/y+1i8hMoRozxddxLzNr120wgQUCZLObIisyMyvyj1TNL/PL+sM8mMACOdx39suH9Vj4TlE2IAILBMirdnzOytrVJ2/N1VxFBBYIkKd2NmE0t1J9PPSYwqVkRwQWCJAhlrgix1nJTqQ5sbz2Gc/zYAIL5GzfyT6i5ko3sey2DSCwQIA8fKcXcdytuX+6y0jqiU8dg4cZEVggp0JMkqQ5VZP6xEy1//Vh8VWaNzFYkiqBBXKudlRtCiektAkqfq19fE+IhtbQDpCjfWesP3f5hN1MHdVlT3PAfIh2gBw+Z+tGk73GbJqOvRV30A4QtHNznGVGYTE5zRm5D/kOELQzHWflNWO5IE/kbh605IN2gJwI2eo70Ujg0b02nkcFNGo9sxpKXwEQfCfP2faZ2JqhbeNHHkS+AwTtzOxmu6rl5YKpLEvLbmgHCNpZYilLNbk8uv2Ub9AOkLPzHS/VzfJCtEb7dKQ/PQOKr7E5jsACwXeUhFD0THyWUkpq4DF8BwjaSbmMbj0D9za2tYxAfQcI2pFWUpP9pWjrXrOU+Ih+NiBoZ5uzrSXovUi69RsY62xAgCQ51JXFbF7z9KC7ZxFYIAdrp2zda2svzxzzmgShHSBop2y7dd63HiRvmqttaAfIqZD9jKk4Syo0NRrb4vJS4+QcW6cZXAQWCL6z3KQoL1bPMf2uPCpB+A6QsyHPzs849KM/b97nb9++lg4qgQWC72xukpsHtuWCvdazyqP4DpCTIWMC1k3n6nbj7uEvcchh7gtNJkVggZye72z9A6mms/YgZHuivgMEyO2K9ml3fXscaeiffrjufYM2gQVyLuT9HSKaexDyEbsxnTNTu/qLRfpLrAgskKO1s9YLmqtdSk+iyjP2+Nx3+hBYIEdrp/kmoiJr17Ke9DarbkOrMEpggZwJcf2c0QgsECBAgAABAgQIECBA/kPIX0gQnw/Yb1/VAAAAAElFTkSuQmCC", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADT0lEQVR42u2dS44dIQxFr6PMYQfZ/7J6B7ACZ2ADrupWJp1IkTio1apH8c7A0pU/GJ65vj3mD/2FAQQIECBAgAABAgQIECD/BGJ7dGla/OVHycw0zbr2x7MYwwK5HNI8xn5hXe4eknF3NZfkQ9Y/L8awQK6GFD9y/IsPScUTdcVMXYxhgVwJ+fl5yppbG5pdbVhzkywmMSwQIH/Ujk/zaS4p/u/5FNHAsECAVO149TuSwvtU4bThnxZjWCC3Q2ZWznbpIFOe/tXH12IMC+Riv/PqzHHJp9V5/2oSwwK5GKIsN4+sPKu5D2X9OerSUaBuOROvYs36LoYFcrF2qnzqq6GcH0rJrIcQFNoBgnbSsyznsmWSy0ZKqcoK7QAh31HJZWyazx4VaZc0uyvLbtYcwwIBUv3OabPZTme5nkdEN1RzIvIdIGjnyKQUDR4B205z1rfId4AQs0mKYMzaMEnTSiDXfb1VRHGzS1L8x7BAyHdiTIs0R23Y2sex6NKJyZLy+OnYwbBArtbObvv02aNukD054Yya26onWBtnxwfDArm+ViA9Up5MamI89332SvIdIGgniwBLQUc4zaua9pp8QDtA0M6rTL3acna9OnU0nj0G1KiBELO92tjao5+tius4I2I2IGjn1WxTd0K3iym+RvSzAQHy9Dsph6HdAnrWjBOzPeI3tAPkUsg6vzNNzW1aPkS0JikuLlhr1ime7tP83GCAYYHcq52ljp6qWa0F7zsKmmv2448wLBDynd2ftg/s7DNu46t8h1oBELRTbimsB3bObuk+yNPeVQK0A4SYLc7p2Gr+1Opqi7e278yJ/py8h6oTswFBO7tz2k7uY4qCQHSy1TumpmFYIEBeWY+7W1fcHxX3UWecNs/1U3uHlLvcgeB3jiNZziVP9KxwTuXQQcRvhmGBANHzpw2mxUP85IGm2a91zdR2Q7XLGsMCuRHyOINQC2iS3ievS+vO1hp1NiBAzpjmH2tv9MNOg+i0o6D1kyIYFsjl+U4d9edC8oR1G3kce7knw7BAgHwVkuUG6DT/yDvbM+WJJGhaPciDYYFc7Xfq3Tjn2pzsCM2bCtrYfW6WXmlgWCC3Qsy/z5gYFggQIECAAAECBAgQIP8h5DdYyjvMNI63HAAAAABJRU5ErkJggg==", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADIUlEQVR42u2dQW7jMAxFPwfdyzfI/Y/VG0gn4CxIyZTTrtoBBtAzAsdxhLcg8PFFirLN9eNj/NEvHECAAAECBAgQIECAAAHyTyC2jktmNhMZ0zC7FOe4HxdrMIEFcirkI79bTxFJWT0Yl8+fcXZJ43oMJrBAgNw+MkySmsfZLnmXXbJr3qyDCSyQw31nP6z16SlyyZqb5MO0XInAAkE778KZktG4woN8mA/zr4VDYIGcrp1NF8PU+sp9rLniM65IdpzAAgEyxRJHZjol2Ym8Ji7s5c/BBBbI2b5TfSSmZ1GgnuU12wYQWCBA3nwnF3HMJLl7LO64eyY+fQ6eZkRggZwKkbu735O0de19KiWGdXmXu6+LGOzu3gkskHO1k7qYioj7K/fxrjwrVbM+aAcIvrN+LpncOlrKKgPWTbQD5GjtLKPZvaZefO9ZBBbI6ZCYvGVNoGU5On3n0zLNWanQrSYCC+Ro31mmczvRTHNWjlM9KP/Fd4AcCtnXd2bvtFqPO9HDprnoU5vcCCwQfGflO3edrdqNnsXqzInId4CgHX/qZa3jLL1kKtS2shvaAQJEkn/OjoJhWlO1WR/QMHt5VAzs5feWUgIL5PA525qDlbaBur6j9w4EagVAqBUoa9GmbSnH5zn2vtUagkrdgMACOTrf6Xq3nu36cZN+NiBoZ2mn1tPa1uG2mVEvLaPM2YCgHS/S0Lb9TaWn+lHQxneAoJ06bas90ulBZd2nNrahHSBo59ZLKbJtY75MgtAOELRTU5jV8/m2naeWFJYloR0g+I7q/tC6kUd77brM8dAOELQjbbO1rYBQt/boVhNzNiBopx61HP1c3Olb6QDtAEE71U0eFbZnQ07bTArtAGHO9mxs832PTvNHsRrfAQIkjvvVBs3z+s5octt1dFnXZ7gRWCBANjPq0jD/zI0G9sqH637RgUBggRwK+fj2n9Yt5m/zgbr5XHfJx+XD1NzyJVYEFsjR2rnTm/kY6sd2g3wpT56dwAJBO6GXTUTN87kfYT0hn/UuHs2XJxJYIOdCzH/OGAQWCBAgQIAAAQIECBAg/yHkLzpdsPeYDSKqAAAAAElFTkSuQmCC", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcAQAAAACVhUrRAAADMklEQVR42u2dS27kMAxEi4PZ2zfI/Y+VG0gnqFnoR9m9SxYD6BmNwO1W3kJAgRRZksP68VX/6BcuIECAAAECBAgQIECAAPldiGzbadFzefu8xjwG23ZhYoEcDGkqsCW5tApA+Dvak4iICF3uP6XBTCwQIBERtyTFLdXocWfcdNW8BjOxQE6F/P3wrIYkS5HFkv4ysUCAfITYY6VzraWNi/wdTCwQIO+44xxialhyDUtRw5Iu99BzlTyYiQVyOqRGLwiol9riVnw5bvX7W6vylgczsUAOhcTbkxMzDNVbkq4Se2B6rY+YWCAHQnrvxkXt0+JObuL056Pa1sasJ/R3gByundn6LKs92ooGvekz7vNDtAME7SyB5HDjpZEsHOIOECA5Z5ui6CnceJhltZ4P+aAdIIdrZyVsD/nMpdBQUB+zDWBigZxdK/AqBaw8bSilR6XkeSPuAEE7eVGzFdNS/S0pZfNaox0gp0KevgLXZLypt5OmYvzU/AZeHR8mFsjBcScZ2PrX9+adFHdWYCLuADk87jTTWo3P0afe3q3UcVnD28bEAjkZYnfTWtuYE1/2d6xgdLm519KeHeFnA0LO9nlL9bXaoL1Gfa2Sde6WkrMBOXq9o9QGLV07q0D9OKZgqow6GxBytnYuwa2slyaNuPWhVmCTswEh7uR8bFlAs50gJ2lFOakj7gBBO7kf+pSS9iWPN5c12gFyJKTXqJ3O93A66MM11ArRrW7QdmGPnXH0RoEQdzb7zbC3zYpB9rP1/5r1BOIOkONztp62XS9btXePQdEzhUM7QE6OO7vbMxcE3rFmi1ZoB8jhcUfP/s5WT5s6yg/pjQJBO/uVlzbPoCNt5xiQswE5HhLzurugIsJF6+vXau6sY6uZWCDnQoaPujuik1n6Kr1eXe8Y1el2OmgPRRVfARByNmfL9McTcjTdBe9kj5wNCJAWdL6sGs3b5qJ2P2sFud0z0jYmFggQSeo7d1pKVsMeb+GpkV+7w3oHCOudLpkZd9RPop6bQ127TlzvuTLivAIgrHeerxAtelpD95L18o5SowZyLiT8cwbvQQACBAgQIECAAAECBMj/CPkHBW7GyRI7fbwAAAAASUVORK5CYII="];
+
+const UI = {
+  en: { work: "Work", of: "of", artist: "Artist", year: "Year", medium: "Medium", size: "Size", price: "Price", sold: "Sold", story: "The story", prev: "Previous", next: "Next", all: "All works" },
+  sv: { work: "Verk", of: "av", artist: "Konstnär", year: "År", medium: "Teknik", size: "Storlek", price: "Pris", sold: "Såld", story: "Berättelsen", prev: "Föregående", next: "Nästa", all: "Alla verk" }
+};
+
+function getLang() {
+  try { const s = localStorage.getItem("lang"); if (s === "en" || s === "sv") return s; } catch (e) {}
+  return (navigator.language || "").toLowerCase().startsWith("sv") ? "sv" : "en";
+}
+let lang = getLang();
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const fmtPrice = p => p == null ? null : new Intl.NumberFormat(lang === "sv" ? "sv-SE" : "en-SE", { style: "currency", currency: "SEK", maximumFractionDigits: 0 }).format(p);
+
+function plate(w) {
+  if (w.img) return `<img src="${esc(w.img)}" alt="">`;
+  const [a, b] = w.colors;
+  return `<div class="ph" style="background:${a}"></div><div class="ph" style="background:${b};inset:58% 0 0 0"></div><div class="ph" style="background:${a};opacity:.55;inset:0 62% 18% 12%"></div>`;
+}
+
+function renderIndex() {
+  const t = EXHIBITION[lang];
+  return `<div class="view intro">
+    <h1>${esc(t.name)}</h1><p>${esc(t.intro)}</p>
+    <ol class="works">${WORKS.map((w, i) => `<li><a href="#art-${pad(i + 1)}">
+      <span class="n">${pad(i + 1)}</span><span class="thumb">${plate(w)}</span>
+      <span class="t"><b>${esc(w[lang].title)}</b><span>${esc(w.artist)}, ${w.year}</span></span></a></li>`).join("")}</ol>
+    <p class="note">${esc(t.note)}</p></div>`;
+}
+
+function renderWork(i) {
+  const w = WORKS[i], c = w[lang], u = UI[lang], n = WORKS.length;
+  const prev = (i - 1 + n) % n, next = (i + 1) % n;
+  const price = fmtPrice(w.price);
+  return `<article class="view">
+    <div class="plate" role="img" aria-label="${esc(c.title)}">${plate(w)}</div>
+    <div class="no">${u.work} ${pad(i + 1)} ${u.of} ${pad(n)}</div>
+    <h1>${esc(c.title)}</h1>
+    <p class="artist">${esc(w.artist)}</p>
+    <dl class="facts">
+      <dt>${u.year}</dt><dd>${w.year}</dd>
+      <dt>${u.medium}</dt><dd>${esc(c.medium)}</dd>
+      <dt>${u.size}</dt><dd>${esc(w.size)}</dd>
+      <dt>${u.price}</dt><dd class="price${price ? "" : " sold"}">${price ? esc(price) : u.sold}</dd>
+    </dl>
+    <section class="story"><h2>${u.story}</h2>${c.story.map(p => `<p>${esc(p)}</p>`).join("")}</section>
+    <nav class="steps" aria-label="${u.all}">
+      <a href="#art-${pad(prev + 1)}"><small>← ${u.prev}</small><span>${esc(WORKS[prev][lang].title)}</span></a>
+      <a class="next" href="#art-${pad(next + 1)}"><small>${u.next} →</small><span>${esc(WORKS[next][lang].title)}</span></a>
+    </nav>
+    <a class="all" href="#">${u.all}</a>
+  </article>`;
+}
+
+function renderQR() {
+  const sv = lang === "sv";
+  return `<div class="view intro">
+    <h1>${sv ? "QR-koder" : "QR codes"}</h1>
+    <p>${sv ? "En kod per verk. Högerklicka eller håll in en bild för att spara den. Koden ändras aldrig när texten uppdateras." : "One code per work. Right-click or long-press an image to save it. The code never changes when the text is updated."}</p>
+    <div class="qrgrid">${WORKS.map((w, i) => `<div class="qrcard">
+      <img src="${QR[i]}" alt="QR ${pad(i + 1)}" width="444" height="444">
+      <b>${pad(i + 1)}</b><span>${esc(w.en.title)}<br>${esc(w.sv.title)}</span>
+      <a href="#art-${pad(i + 1)}">${sv ? "Öppna sidan" : "Open page"} →</a></div>`).join("")}</div></div>`;
+}
+
+function render() {
+  document.documentElement.lang = lang;
+  document.getElementById("brand").textContent = EXHIBITION[lang].name; document.title = EXHIBITION[lang].name;
+  document.querySelectorAll(".lang button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+  const m = /^#art-(\d{1,2})$/.exec(location.hash);
+  const i = m ? parseInt(m[1], 10) - 1 : -1;
+  document.getElementById("app").innerHTML = location.hash === "#qr-codes" ? renderQR() : (i >= 0 && i < WORKS.length) ? renderWork(i) : renderIndex();
+}
+
+document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => {
+  lang = b.dataset.lang;
+  try { localStorage.setItem("lang", lang); } catch (e) {}
+  render();
+}));
+let lastHash = location.hash;
+window.addEventListener("hashchange", () => { render(); if (location.hash !== lastHash) window.scrollTo(0, 0); lastHash = location.hash; });
+render();
+</script>
+
+</body>
+</html>
