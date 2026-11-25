@@ -104,11 +104,11 @@ nav.pager .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-item
 .intro p { margin: 0; max-width: 46ch; color: var(--muted); }
 .list { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .list a {
-  display: grid; grid-template-columns: 2.6rem 1fr auto; align-items: center; gap: 12px;
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
   min-height: 72px; padding: 12px 16px; border-radius: 12px; background: var(--card); border: 1px solid var(--rule);
   color: var(--fg); text-decoration: none;
 }
-.list .n { font-size: 1rem; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+.list .n { display: block; margin-top: 4px; font-family: var(--font-ui); font-size: 0.9rem; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 .list .t { font-family: var(--font-display); font-size: 1.6rem; line-height: 1.1; min-width: 0; overflow-wrap: anywhere; }
 .list .go { font-size: 1.3rem; color: var(--accent); }
 .start { margin-top: 24px; }
@@ -137,28 +137,30 @@ nav.pager .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-item
 // ===== EDIT HERE: exhibition + artworks =====
 const EXHIBITION = {
   artist: "Mahshad Parsi Nezhad",
+  initial: "M",   // artwork number = initial-year-001, e.g. M-2026-001
   year: 2026,
   en: { name: "First Life", intro: "Works by Mahshad Parsi Nezhad. Choose a work to read its story." },
   sv: { name: "First Life", intro: "Verk av Mahshad Parsi Nezhad. Välj ett verk för att läsa dess berättelse." }
 };
 // img: photo file for later (e.g. "img/01.jpg"); not shown yet.
+// size: dimensions, e.g. "70 × 100 cm". medium: e.g. "Oil on canvas" / "Olja på duk". Leave "" to hide a row.
 const WORKS = [
-  { img: "", en: { title: "Untitled I",    story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel I",    story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled II",   story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel II",   story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled III",  story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel III",  story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled IV",   story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel IV",   story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled V",    story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel V",    story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled VI",   story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel VI",   story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled VII",  story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel VII",  story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled VIII", story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel VIII", story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled IX",   story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel IX",   story: ["[Berättelsen bakom verket kommer här.]"] } },
-  { img: "", en: { title: "Untitled X",    story: ["[The story behind this work goes here.]"] }, sv: { title: "Utan titel X",    story: ["[Berättelsen bakom verket kommer här.]"] } }
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled I",    story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel I",    story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled II",   story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel II",   story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled III",  story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel III",  story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled IV",   story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel IV",   story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled V",    story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel V",    story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled VI",   story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel VI",   story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled VII",  story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel VII",  story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled VIII", story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel VIII", story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled IX",   story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel IX",   story: ["[Berättelsen bakom verket kommer här.]"] } },
+  { img: "", size: "[W × H cm]", en: { medium: "[Medium]", title: "Untitled X",    story: ["[The story behind this work goes here.]"] }, sv: { medium: "[Teknik]", title: "Utan titel X",    story: ["[Berättelsen bakom verket kommer här.]"] } }
 ];
 // ===== END EDIT =====
 
 const UI = {
-  en: { of: "of", prev: "Previous", next: "Next", all: "All works", start: "Start with work 1", work: "Work", artist: "Artist", year: "Year", story: "The story" },
-  sv: { of: "av", prev: "Föregående", next: "Nästa", all: "Alla verk", start: "Börja med verk 1", work: "Verk", artist: "Konstnär", year: "År", story: "Berättelsen" }
+  en: { of: "of", prev: "Previous", next: "Next", all: "All works", start: "Start with work 1", work: "Work", artist: "Artist", year: "Year", story: "The story", number: "No.", medium: "Medium", size: "Dimensions" },
+  sv: { of: "av", prev: "Föregående", next: "Nästa", all: "Alla verk", start: "Börja med verk 1", work: "Verk", artist: "Konstnär", year: "År", story: "Berättelsen", number: "Nr", medium: "Teknik", size: "Mått" }
 };
 const BACK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>`;
 
@@ -170,6 +172,7 @@ let lang = getLang();
 const N = WORKS.length;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const pad = n => String(n).padStart(2, "0");
+const code = i => `${EXHIBITION.initial}-${EXHIBITION.year}-${String(i + 1).padStart(3, "0")}`;
 const $ = id => document.getElementById(id);
 
 function currentIndex() {
@@ -188,7 +191,7 @@ function renderHome() {
       <a class="pbtn primary start" href="#art-01">${u.start} →</a>
     </section>
     <ol class="list" aria-label="${u.all}">${WORKS.map((w, i) => `<li><a href="#art-${pad(i + 1)}">
-      <span class="n">${pad(i + 1)}</span><span class="t">${esc(w[lang].title)}</span><span class="go" aria-hidden="true">→</span></a></li>`).join("")}</ol>
+      <span class="t">${esc(w[lang].title)}<span class="n">${code(i)}</span></span><span class="go" aria-hidden="true">→</span></a></li>`).join("")}</ol>
   </div>`;
 }
 
@@ -199,10 +202,13 @@ function renderWork(i) {
     <p class="count">${u.work} ${i + 1} ${u.of} ${N}</p>
     <article class="card" aria-labelledby="t">
       <h1 id="t">${esc(c.title)}</h1>
-      <dl>
-        <dt>${u.artist}</dt><dd>${esc(EXHIBITION.artist)}</dd>
-        <dt>${u.year}</dt><dd>${EXHIBITION.year}</dd>
-      </dl>
+      <dl>${[
+        [u.number, code(i)],
+        [u.artist, EXHIBITION.artist],
+        [u.year, EXHIBITION.year],
+        [u.medium, c.medium],
+        [u.size, w.size]
+      ].filter(r => r[1] !== "" && r[1] != null).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
     </article>
     ${story.length ? `<section class="story" aria-labelledby="s"><h2 id="s">${u.story}</h2>${story.map(p => `<p>${esc(p)}</p>`).join("")}</section>` : ""}
   </div>`;

@@ -42,7 +42,8 @@ for i, w in enumerate(WORKS):
     c.drawString(tx, top - 2*mm, f"{EX['en']['name'].upper()}  ·  {EX['artist'].upper()}")
     c.setStrokeColorRGB(*INK); c.setLineWidth(.8); c.line(tx, top - 4*mm, x + lw - p, top - 4*mm)
     c.drawImage(ImageReader(pngs[i]), qx, top - 6*mm - qs, qs, qs)
-    c.setFillColorRGB(*ACCENT); c.setFont("Helvetica-Bold", 22); c.drawString(tx, top - 14*mm, f"{i+1:02d}")
+    num = f"{EX['initial']}-{EX['year']}-{i+1:03d}"
+    c.setFillColorRGB(*ACCENT); sz = fit(c, num, "Helvetica-Bold", 18, textw); c.setFont("Helvetica-Bold", sz); c.drawString(tx, top - 13*mm, num)
     en, sv = w["en"]["title"], w["sv"]["title"]
     c.setFillColorRGB(*INK)
     s = fit(c, en, "Times-Roman", 15, textw); c.setFont("Times-Roman", s); c.drawString(tx, top - 22*mm, en)
