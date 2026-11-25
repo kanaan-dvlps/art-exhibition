@@ -1,4 +1,5 @@
-"""Builds qr/art-NN.png and qr/print-labels-A4.pdf from the data in index.html.
+"""Builds qr/art-NN.png, qr/entrance.png and qr/print-labels-A4.pdf (page 1 = entrance poster,
+then the wall labels) from the data in index.html.
 Run from the repo root:  python3 tools/make_labels.py
 Needs: node, pip install "qrcode[pil]" reportlab
 """
@@ -30,6 +31,26 @@ def fit(c, text, font, size, maxw):
 
 INK, MUTED, ACCENT, RULE = (0.082, 0.086, 0.075), (0.33, 0.35, 0.31), (0.18, 0.36, 0.27), (0.8, 0.8, 0.78)
 c = canvas.Canvas("qr/print-labels-A4.pdf", pagesize=A4); W, H = A4
+# ---- Page 1: entrance poster (one QR to the home page with all works) ----
+q = qrcode.QRCode(error_correction=ERROR_CORRECT_Q, box_size=24, border=2); q.add_data(BASE); q.make(fit=True)
+q.make_image().convert("1").save("qr/entrance.png", optimize=True)
+cx = W / 2
+c.setFillColorRGB(0.969, 0.969, 0.957); c.rect(0, 0, W, H, stroke=0, fill=1)
+c.setFillColorRGB(*MUTED); c.setFont("Helvetica-Bold", 11)
+c.drawCentredString(cx, H - 30*mm, f"{EX['artist'].upper()}  ·  {EX['year']}")
+c.setFillColorRGB(*INK); c.setFont("Times-Roman", 84); c.drawCentredString(cx, H - 62*mm, EX["en"]["name"])
+c.setFillColorRGB(*MUTED); c.setFont("Helvetica", 15); c.drawCentredString(cx, H - 76*mm, "Welcome  ·  Välkommen")
+qs = 120*mm; qy = H - 88*mm - qs
+c.setFillColorRGB(1, 1, 1); c.roundRect(cx - qs/2 - 8*mm, qy - 8*mm, qs + 16*mm, qs + 16*mm, 6*mm, stroke=0, fill=1)
+c.drawImage(ImageReader("qr/entrance.png"), cx - qs/2, qy, qs, qs)
+c.setFillColorRGB(*ACCENT); c.setFont("Helvetica-Bold", 22); c.drawCentredString(cx, qy - 24*mm, "Scan to explore all works")
+c.setFont("Helvetica", 20); c.drawCentredString(cx, qy - 33*mm, "Skanna för att utforska alla verk")
+c.setFillColorRGB(*MUTED); c.setFont("Helvetica", 11)
+c.drawCentredString(cx, qy - 45*mm, "Use your phone camera. No app needed.  ·  Använd mobilkameran. Ingen app behövs.")
+c.drawCentredString(cx, 16*mm, BASE.replace("https://", ""))
+c.showPage()
+
+# ---- Pages 2+: wall labels, 8 per A4 ----
 lw, lh = 95*mm, 68*mm; mx, my = (W - 2*lw)/2, (H - 4*lh)/2
 for i, w in enumerate(WORKS):
     k = i % 8
